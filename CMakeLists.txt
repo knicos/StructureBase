@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8)
-project (DOSTE)
+project (DSB)
 
-include_directories(${DOSTE_SOURCE_DIR}/core/include)
+include_directories(${DSB_SOURCE_DIR}/core/include)
 
 set(CMAKE_CXX_FLAGS "-g -Wall")
 

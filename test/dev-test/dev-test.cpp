@@ -1,9 +1,9 @@
-#include <doste/doste.h>
+#include <dsb/dsb.h>
 #include <iostream>
 
 int main() {
   std::cout << "Hello World.\n";
-  doste::Initialise();
+  dsb::Initialise();
   
-  doste::Finalise();
+  dsb::Finalise();
 }
