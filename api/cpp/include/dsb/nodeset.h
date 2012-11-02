@@ -1,21 +1,21 @@
 #ifndef _DSB_NODESET_H_
 #define _DSB_NODESET_H_
 
-#include <memory>
-#include <vector>
-
-using namespace std;
+#include <dsb/nid.h>
 
 namespace dsb {
-class NID;
+namespace rpc {
+class Packet;
+};
+
 class NodeSet {
 	public:
 	NodeSet() {};
 	virtual ~NodeSet() {};
 	
 	virtual int Count() = 0;
-	//virtual int Pack(dsb::Buffer &data) { return 0; };
-	//virtual void UnPack(dsb::Buffer &data) {};
+	virtual int Pack(dsb::rpc::Packet *data) { return 0; };
+	virtual void UnPack(dsb::rpc::Packet *data) {};
 	virtual dsb::NID Get(int i) = 0;
 	
 	//Requires a generator.

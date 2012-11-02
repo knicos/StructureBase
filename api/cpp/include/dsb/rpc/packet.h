@@ -1,26 +1,33 @@
 #ifndef _DSB_RPC_PACKET_H_
 #define _DSB_RPC_PACKET_H_
 
-namespace dsb::rpc {
-struct Header;
+#include <dsb/rpc/header.h>
+
+namespace dsb {
+namespace rpc {
 
 class Packet {
-	public:
-	Packet(void *data, int max)
-	 : data_(data), max_(max), position_(0) {};
-	~Packet() {};
+    public:
+    Packet(void *data, int max)
+     : data_(data),
+       max_(max),
+       position_(sizeof(dsb::rpc::Header)) {};
+     ~Packet() {};
+
+     void SetFunction(int function) {
+         dsb::rpc::Header *header = static_cast<Header*>(data_);
+         header->function = function;
+     };
+     bool Push(const NodeSet &set);
+     bool Pop(NodeSet &set);
 	
-	dsb::rpc::Header *Header() {
-		return static_cast<dsb::rpc::Header*>(data_);
-	};
+     void *Raw() { return data_; };
 	
-	void *GetSpace(int amount);
-	void *Raw() { return data_; };
-	
-	private:
-	void *data_;
-	int max_;
-	int position_;
+    private:
+    void *data_;
+    int max_;
+    int position_;
+};
 };
 };
 

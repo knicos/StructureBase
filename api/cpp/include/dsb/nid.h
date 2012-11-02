@@ -20,6 +20,7 @@ class NID {
 	operator int() const {
 		if (type_ == NT_INTEGER)
 		return static_cast<int>(v_);
+                return 0;
 	};
 	
 	private:
