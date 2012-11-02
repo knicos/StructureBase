@@ -2,6 +2,7 @@
 #define _DSB_SINGLETONNS_H_
 
 #include <dsb/nodeset.h>
+#include <dsb/nodeset_types.h>
 #include <dsb/nid.h>
 
 namespace dsb {
@@ -15,10 +16,10 @@ class SingletonNS : public dsb::NodeSet {
 	~SingletonNS() {};
 	
 	int Count() { return 1; };
-	int Pack(dsb::rpc::Packet *data);
-	void UnPack(dsb::rpc::Packet *data);
-	
+	int Pack(char *data, int max);
+	int UnPack(char *data);
 	dsb::NID Get(int i) { return (i==0) ? nid_ : dsb::Null; };
+        char Type() { return NS_SINGLETON; };
 	
 	private:
 	dsb::NID nid_;
