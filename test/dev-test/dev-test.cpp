@@ -5,6 +5,8 @@
 #include <iostream>
 #include <memory>
 #include <string.h>
+#include <dsb/rpc/rpc.h>
+#include <dsb/rpc/connection.h>
 
 using namespace std;
 
@@ -18,6 +20,11 @@ int main() {
   
   dsb::rpc::Packet *mypacket = new dsb::rpc::Packet(new char[20], 20);
   mypacket->Push(&myns);
+  
+  dsb::rpc::Initialise();
+  new dsb::rpc::Connection("127.0.0.1",8081);
+  
+  
   mypacket->Reset();
   unique_ptr<dsb::NodeSet> resultns(mypacket->Pop());
   

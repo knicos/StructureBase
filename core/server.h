@@ -19,21 +19,27 @@ namespace dsbd {
     namespace rpc {
         class Server {
         public:
-            Server(int port) : port_(port), listening_(false) {};
-            ~Server();
+            Server(int port) : port_(port), listening_(false) {
+                server_ = this;
+            };
+            ~Server() {};
 
             bool Listen();
+            
+            int SetDescriptors(fd_set &fdread, fd_set &fderror);
+            void CheckStatus(fd_set &fdread, fd_set &fderror);
+            
+            static Server *GetServer() { return server_; };
 
         private:
             bool AcceptConnections();
-            int SetDescriptors();
     
             int port_;
             bool listening_;
             int sd_;
-            fd_set fdread_;
-            fd_set fderror_;
             sockaddr_in localAddr_;
+            
+            static Server *server_;
         };
     };
 };
