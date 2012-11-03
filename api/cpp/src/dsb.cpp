@@ -2,32 +2,30 @@
 #include <dsb/nodeset.h>
 #include <iostream>
 #include <string.h>
+#include <dsb/rpc/rpc.h>
+#include <dsb/rpc/connection.h>
 
 dsb::DSB *dsb::DSB::self_ = 0;
 
-dsb::DSB::DSB(const char *dsbdir) {
-  int length = 0;
-  if (dsbdir != 0) length = strlen(dsbdir);
-  if (length > 0) {
-    dsbdir_ = new char[length];
-    strcpy(dsbdir_, dsbdir);
-  } else {
-    dsbdir_ = 0;
-  }
-  initialised_ = false;
+dsb::DSB::DSB(const char *address, int port) {
+    initialised_ = false;
+    address_ = address;
+    port_ = port;
 }
 
 dsb::DSB::~DSB() {
-  if (dsbdir_ != 0) delete [] dsbdir_;
+    dsb::rpc::Finalise();
   initialised_ = false;
   self_ = 0;
 }
 
 bool dsb::DSB::Initialise() {
   std::cout << "DSB Initialising... ";
-  if ((self_ == 0) && (dsbdir_ != 0)) {
+  if (self_ == 0) {
     initialised_ = true;
     self_ = this;
+    dsb::rpc::Initialise();
+    connection_ = new dsb::rpc::Connection(address_, port_);
     std::cout << "success.\n";
     return true;
   }

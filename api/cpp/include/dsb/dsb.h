@@ -7,9 +7,13 @@ namespace dsb {
 class NID;
 class NodeSet;
 
+namespace rpc{
+    class Connection;
+};
+
 class DSB {
-	public:
-	DSB(const char *dsbdir);
+public:
+	DSB(const char *address, int port);
 	~DSB();
 	
 	bool Initialise();
@@ -19,9 +23,11 @@ class DSB {
 	
 	static DSB *DSBInstance() { return self_; };
 	
-	private:
-	char *dsbdir_;
+private:
+    dsb::rpc::Connection *connection_;
 	bool initialised_;
+    int port_;
+    const char *address_;
 	
 	static DSB *self_;
 };
