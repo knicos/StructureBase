@@ -2,6 +2,7 @@
 #include <dsb/rpc/connection.h>
 #include "rpc.h"
 #include "server.h"
+#include <iostream>
 
 bool dsbd::rpc::Initialise() {
     dsb::rpc::Connection::Initialise();
@@ -17,6 +18,8 @@ void dsbd::rpc::Run() {
     fd_set fderror;
     
     while (true) {
+        FD_ZERO(&fdread);
+        FD_ZERO(&fderror);
         int n1 = dsbd::rpc::Server::GetServer()->SetDescriptors(fdread,fderror);
         int n2 = dsb::rpc::Connection::SetDescriptors(fdread,fderror);
         int n = (n1 > n2) ? n1 : n2;
@@ -28,6 +31,8 @@ void dsbd::rpc::Run() {
         if (selres <= 0) {
             return;
         }
+        
+        std::cout << "DSBD: SOMETHING\n";
 
         dsbd::rpc::Server::GetServer()->CheckStatus(fdread,fderror);
         dsb::rpc::Connection::CheckStatus(fdread,fderror);
@@ -38,6 +43,8 @@ void dsbd::rpc::Poll() {
     fd_set fdread;
     fd_set fderror;
     
+    FD_ZERO(&fdread);
+    FD_ZERO(&fderror);
     int n1 = dsbd::rpc::Server::GetServer()->SetDescriptors(fdread,fderror);
     int n2 = dsb::rpc::Connection::SetDescriptors(fdread,fderror);
     int n = (n1 > n2) ? n1 : n2;

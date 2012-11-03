@@ -14,6 +14,8 @@ void dsb::rpc::Poll() {
     fd_set fdread;
     fd_set fderror;
     
+    FD_ZERO(&fdread);
+    FD_ZERO(&fderror);
     int n = dsb::rpc::Connection::SetDescriptors(fdread,fderror);
 
     //Wait for a network event or timeout in 3 seconds
@@ -26,15 +28,6 @@ void dsb::rpc::Poll() {
     if (selres <= 0) {
         return;
     }
-
-    //If connection request is waiting
-    /*if (s_server) {
-        if (FD_ISSET(s_sd, &s_fdread)) {
-            if (!acceptConnections()) {
-                return;
-            }
-        }
-    }*/
     
     dsb::rpc::Connection::CheckStatus(fdread,fderror);
 }

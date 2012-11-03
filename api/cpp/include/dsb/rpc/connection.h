@@ -10,10 +10,11 @@ namespace dsb {
         public:
             Connection(int socket);
             Connection(const char *address, int port);
-            ~Connection() {};
+            ~Connection();
 
             int Socket() { return socket_; };
             bool Connect(const char *address, int port);
+            void Close();
             
             static void Initialise();
             static void Finalise();
@@ -25,7 +26,11 @@ namespace dsb {
             static const unsigned int MAX_CONNECTIONS = 50;
 
         private:
+            void Data();
+            void Error();
+            
             int socket_;
+            bool active_;
             
             static int FindFree();
 

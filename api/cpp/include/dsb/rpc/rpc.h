@@ -8,7 +8,7 @@
 #ifndef RPC_H
 #define	RPC_H
 
-namespace dsb {
+namespace dsb {  
     namespace rpc {
         bool Initialise();
         bool Finalise();

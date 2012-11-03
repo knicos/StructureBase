@@ -1,4 +1,5 @@
 #include <dsb/rpc/connection.h>
+#include <dsb/rpc/header.h>
 #include <errno.h>
 #include <fcntl.h>
 #define INVALID_SOCKET -1
@@ -35,12 +36,13 @@ void dsb::rpc::Connection::CheckStatus(fd_set &fdread, fd_set &fderror) {
     //Also check each clients socket to see if any messages or errors are waiting
     for (int i=0; i<MAX_CONNECTIONS; i++) {
         if (connections_[i] && connections_[i]->Socket() >= 0) {
+            std::cout << "Found connection to check\n";
             //If message received from this client then deal with it
             if (FD_ISSET(connections_[i]->Socket(), &fdread)) {
-                //connections_[i]->data();
+                connections_[i]->Data();
             //An error occured with this client.
             } else if (FD_ISSET(connections_[i]->Socket(), &fderror)) {
-                //connections_[i]->error();
+                connections_[i]->Error();
             }
         }
     }
@@ -56,6 +58,10 @@ dsb::rpc::Connection::Connection(const char *address, int port) {
     int free = FindFree();
     connections_[free] = this;
     Connect(address, port);
+}
+
+dsb::rpc::Connection::~Connection() {
+    Close();
 }
 
 
@@ -80,10 +86,39 @@ bool dsb::rpc::Connection::Connect(const char *address, int port) {
 
 	if (rc == SOCKET_ERROR) {
 		close(socket_);
+        socket_ = INVALID_SOCKET;
         std::cout << "DSB: Unable to connect to server" << std::endl;
 		return false;
 	}
+    
+    std::cout << "DSB: Connected to " << address << std::endl;
+    return true;
+}
 
+void dsb::rpc::Connection::Close() {
+    if (socket_ != INVALID_SOCKET) {
+        close(socket_);
+        socket_ = INVALID_SOCKET;
+    }
+}
+
+void dsb::rpc::Connection::Data() {
+    //Read and process data.
+    std::cout << "Some Data\n";
+    int rc = 0;
+	dsb::rpc::Header header;
+	rc = recv(socket_, (char*)&header, sizeof(header), 0);
+    
+    if (rc <= 0) {
+        std::cout << "DSB: Disconnected." << std::endl;
+        Close();
+    }
+}
+
+void dsb::rpc::Connection::Error() {
+    //find out what the error was.
+    std::cout << "DSB: Connection Error." << std::endl;
+    Close();
 }
 
 int dsb::rpc::Connection::FindFree() {
@@ -101,4 +136,7 @@ void dsb::rpc::Connection::Initialise() {
 
 void dsb::rpc::Connection::Finalise() {
     //Delete all connections.
+    for (int i=0; i<MAX_CONNECTIONS; ++i) {
+        if (connections_[i]) delete connections_[i];
+    }
 }

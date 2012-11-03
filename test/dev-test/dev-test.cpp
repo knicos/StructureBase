@@ -23,6 +23,7 @@ int main() {
   
   dsb::rpc::Initialise();
   new dsb::rpc::Connection("127.0.0.1",8081);
+  dsb::rpc::Finalise();
   
   
   mypacket->Reset();
