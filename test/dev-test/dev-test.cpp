@@ -11,18 +11,19 @@
 using namespace std;
 
 int main() {
-  cout << "Hello World.\n";
-  
-  unique_ptr<dsb::DSB> mydsb(new dsb::DSB("localhost", 8081));
-  mydsb->Initialise();
-  
-  dsb::SingletonNS myns(dsb::NID(5));
-  
-  dsb::rpc::Packet *mypacket = new dsb::rpc::Packet(new char[20], 20);
-  mypacket->Push(&myns);
-  
-  mypacket->Reset();
-  unique_ptr<dsb::NodeSet> resultns(mypacket->Pop());
-  
-  cout << "NS: " << (int)resultns->Get(0) << endl;
+    cout << "Hello World.\n";
+
+    dsb::Initialise();
+    dsb::Connect("localhost", 8081);
+
+    dsb::SingletonNS myns(dsb::NID(5));
+
+    dsb::rpc::Packet *mypacket = new dsb::rpc::Packet(new char[20], 20);
+    mypacket->Push(&myns);
+
+    mypacket->Reset();
+    unique_ptr<dsb::NodeSet> resultns(mypacket->Pop());
+
+    cout << "NS: " << (int)resultns->Get(0) << endl;
+    dsb::Finalise();
 }

@@ -5,33 +5,19 @@
 #include <dsb/rpc/rpc.h>
 #include <dsb/rpc/connection.h>
 
-dsb::DSB *dsb::DSB::self_ = 0;
-
-dsb::DSB::DSB(const char *address, int port) {
-    initialised_ = false;
-    address_ = address;
-    port_ = port;
-}
-
-dsb::DSB::~DSB() {
-    dsb::rpc::Finalise();
-  initialised_ = false;
-  self_ = 0;
-}
-
-bool dsb::DSB::Initialise() {
-  std::cout << "DSB Initialising... ";
-  if (self_ == 0) {
-    initialised_ = true;
-    self_ = this;
+bool dsb::Initialise() {
     dsb::rpc::Initialise();
-    connection_ = new dsb::rpc::Connection(address_, port_);
-    std::cout << "success.\n";
-    return true;
-  }
-  std::cout << "failed.\n";
-  return false;
 }
+
+void dsb::Finalise() {
+    dsb::rpc::Finalise();
+}
+
+bool dsb::Connect(const char *address, int port) {
+    new dsb::rpc::Connection(address, port);
+    return true;
+}
+
 
 /*std::unique_ptr<dsb::NodeSet> dsb::DSB::Follow(const dsb::NodeSet &s1, const dsb::NodeSet &s2) {
   //Check local cache if there is one.
