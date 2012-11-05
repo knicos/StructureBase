@@ -15,17 +15,11 @@ namespace dsb {
 namespace dsb {  
     namespace rpc {
         class Connection;
-        typedef bool (*handler_t)(dsb::rpc::Connection*, dsb::NodeSet**, int);
+        
         
         bool Initialise();
         bool Finalise();
         void Poll();
-        
-        bool Call(dsb::rpc::Connection *connection,
-                  int function,
-                  NodeSet **parameters,
-                  int pcount);
-        bool AddHandler(int function, handler_t fptr);
     };
 };
 

@@ -1,13 +1,16 @@
 #include <dsb/rpc/rpc.h>
 #include <dsb/rpc/connection.h>
+#include <dsb/rpc/handlers.h>
 
 bool dsb::rpc::Initialise() {
     dsb::rpc::Connection::Initialise();
+    dsb::rpc::Handlers::Initialise();
     return true;
 }
 
 bool dsb::rpc::Finalise() {
     dsb::rpc::Connection::Finalise();
+    dsb::rpc::Handlers::Finalise();
 }
 
 void dsb::rpc::Poll() {

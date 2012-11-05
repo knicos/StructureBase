@@ -1,4 +1,5 @@
 #include <dsb/rpc/connection.h>
+#include <dsb/rpc/handlers.h>
 #include <dsb/nid.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -131,6 +132,7 @@ bool dsb::rpc::Connection::Send(dsb::request_t request, dsb::NID *params) {
     //For now, flush immediately.
     //Better eventually to fill buffer and compress it.
     Flush();
+    return true;
 }
 
 void dsb::rpc::Connection::Flush() {
@@ -159,6 +161,7 @@ void dsb::rpc::Connection::Data() {
     if (rc <= 0) {
         std::cout << "DSB: Disconnected." << std::endl;
         Close();
+        return;
     }
     
     unsigned short length = reinterpret_cast<unsigned short*>(inbuffer_)[0];
@@ -175,8 +178,8 @@ void dsb::rpc::Connection::Data() {
         request = static_cast<dsb::request_t>(inbuffer_[inposition_++]);
         
         //NOW PROCESS THIS REQUEST!!
-        std::cout << "DSB: Request - " << static_cast<int>(request) << std::endl;
-        //handler(reinterpret_cast<dsb::NID*>(&(inbuffer_[inposition_])))
+        std::cout << "DSB: Request - " << dsb::requests[request].name << std::endl;
+        dsb::rpc::Handlers::Call(request, this,reinterpret_cast<dsb::NID*>(&(inbuffer_[inposition_])));
         
         inposition_ += dsb::requests[request].params*sizeof(dsb::NID);
     }

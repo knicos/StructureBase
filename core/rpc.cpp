@@ -1,16 +1,20 @@
 #include <dsb/rpc/rpc.h>
 #include <dsb/rpc/connection.h>
+#include <dsb/rpc/handlers.h>
 #include "rpc.h"
 #include "server.h"
 #include <iostream>
 
 bool dsbd::rpc::Initialise() {
     dsb::rpc::Connection::Initialise();
+    dsb::rpc::Handlers::Initialise();
     return true;
 }
 
 bool dsbd::rpc::Finalise() {
     dsb::rpc::Connection::Finalise();
+    dsb::rpc::Handlers::Finalise();
+    return true;
 }
 
 void dsbd::rpc::Run() {

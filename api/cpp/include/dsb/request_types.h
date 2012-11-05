@@ -11,6 +11,7 @@
 namespace dsb {
     enum request_t {RT_NOP,RT_TEST,RT_LAST};
     struct request_entry {
+        const char *name;
         int params;
     };
     extern request_entry requests[];

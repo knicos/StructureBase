@@ -1,5 +1,4 @@
 #include <dsb/dsb.h>
-#include <dsb/nodeset.h>
 #include <iostream>
 #include <string.h>
 #include <dsb/rpc/rpc.h>
@@ -7,6 +6,7 @@
 
 bool dsb::Initialise() {
     dsb::rpc::Initialise();
+    return true;
 }
 
 void dsb::Finalise() {

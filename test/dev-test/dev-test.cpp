@@ -1,7 +1,5 @@
 #include <dsb/dsb.h>
 #include <dsb/nid.h>
-#include <dsb/singletonns.h>
-#include <dsb/rpc/packet.h>
 #include <iostream>
 #include <memory>
 #include <string.h>
