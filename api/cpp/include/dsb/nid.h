@@ -8,7 +8,7 @@ class NID {
 	//friend class NID;
 
 	public:
-	NID();
+	NID() : type_(NT_SPECIAL),v_(0) {};
 	NID(dsb::node_type_t type, unsigned int v)
 	  : type_(type), v_(v) {};
 	NID(int v) : type_(NT_INTEGER), v_(v) {};

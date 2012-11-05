@@ -16,14 +16,8 @@ int main() {
     dsb::Initialise();
     dsb::Connect("localhost", 8081);
 
-    dsb::SingletonNS myns(dsb::NID(5));
-
-    dsb::rpc::Packet *mypacket = new dsb::rpc::Packet(new char[20], 20);
-    mypacket->Push(&myns);
-
-    mypacket->Reset();
-    unique_ptr<dsb::NodeSet> resultns(mypacket->Pop());
-
-    cout << "NS: " << (int)resultns->Get(0) << endl;
+    dsb::rpc::Connection *mycon = dsb::rpc::Connection::FindBest();
+    mycon->Send(dsb::RT_TEST, (dsb::NID[]){dsb::NID(),dsb::NID(),dsb::NID()});
+    
     dsb::Finalise();
 }
